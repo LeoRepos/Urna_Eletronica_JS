@@ -7,10 +7,12 @@ let numeros = document.querySelector('.d-1-3');
 
 let etapaAtual = 0; 
 let numero = '';
+let votoBranco = false;
+let votos = [];
 
 function comecarEtapa() {
-    let etapa = etapas[etapaAtual];
 
+    let etapa = etapas[etapaAtual];
     let numeroHtml = '';
 
     for(let i = 0; i < etapa.numeros; i++) {
@@ -25,22 +27,110 @@ function comecarEtapa() {
     numeros.innerHTML = numeroHtml;
 
 }
+<<<<<<< HEAD
+=======
+function atualizaInterface() {
+    let etapa = etapas[etapaAtual];
+    let candidato = etapa.candidatos.filter((item) => {
+        if (item.numero === numero) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    if (candidato.length > 0) {
+        candidato = candidato[0];
+        seuVotoPara.style.display = 'block';
+        aviso.style.display = 'block';
+        descricao.innerHTML = `Nome: ${candidato.nome}<br/>Partido: ${candidato.partido}`;
 
+        let fotosHtml = '';
+        for (let i in candidato.fotos) {
+            if (candidato.fotos[i].small) {
+                fotosHtml += `<div class="d-1-image small"><img src="images/${candidato.fotos[i].url}" alt="" /> ${candidato.fotos[i].legenda} </div>`
+            } else {
+                fotosHtml += `<div class="d-1-image"><img src="images/${candidato.fotos[i].url}" alt="" /> ${candidato.fotos[i].legenda} </div>`
+            }
+        }
+        lateral.innerHTML = fotosHtml;
+    } else {
+        seuVotoPara.style.display = 'block';
+        aviso.style.display = 'block';
+        descricao.innerHTML = '<div class="aviso--grande pisca">VOTO NULO</div';
+    }
+
+    console.log("Candidato", candidato);
+>>>>>>> 4119430126339e19b515d6671a9c5b7c49d4d69c
+
+}
 function clicou(n) {
+<<<<<<< HEAD
     alert('Clicou em ' + n);
+=======
+    let elNumero = document.querySelector('.numero.pisca');
+    if (elNumero !== null) {
+        elNumero.innerHTML = n;
+        numero = `${numero}${n}`;
+
+        elNumero.classList.remove('pisca');
+        if (elNumero.nextElementSibling !== null) {
+            elNumero.nextElementSibling.classList.add('pisca');
+        } else {
+            atualizaInterface();
+        }
+    }
+>>>>>>> 4119430126339e19b515d6671a9c5b7c49d4d69c
 }
 
 function branco() {
-    alert('Clicou em BRANCO!');
-
+    if (numero === '') {
+        votoBranco = true;
+        seuVotoPara.style.display = 'block';
+        aviso.style.display = 'block';
+        numeros.innerHTML = '';
+        descricao.innerHTML = '<div class="aviso--grande pisca">VOTO EM BRANCO</div';
+    }
+    else {
+        alert("Para voto em BRANCO, não digite algum numero!");
+    }
 }
 
+<<<<<<< HEAD
 function corrige() {    
     alert('Clicou em CORRIGE!');
+=======
+function corrige() {
+    comecarEtapa();
+>>>>>>> 4119430126339e19b515d6671a9c5b7c49d4d69c
 }
 
 function confirma() {
-    alert('Clicou em CONFIRMA!');
-}
 
+    let etapa = etapas[etapaAtual];
+    let votoConfirmado = false;
+
+    if (votoBranco === true) {
+        votoConfirmado = true;
+        votos.push({
+            etapa: etapas[etapaAtual].titulo,
+            voto: 'branco'
+        });
+    }
+    else if (numero.length === etapa.numeros) {
+        votoConfirmado = true;
+        votos.push({
+            etapa: etapas[etapaAtual].titulo,
+            voto: numero
+        });
+    }
+    if (votoConfirmado) {
+        etapaAtual++;
+        if (etapas[etapaAtual] !== undefined) {
+            comecarEtapa();
+        } else {
+            document.querySelector('.tela').innerHTML = '<div class="aviso--gigante pisca">FIM!</div';
+            console.log(votos);
+        }
+    }
+}
 comecarEtapa();
